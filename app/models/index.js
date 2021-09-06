@@ -1,17 +1,9 @@
 const dbConfig = require("../config/db.config.js");
 
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
-  host: dbConfig.HOST,
-  dialect: dbConfig.dialect,
-  logging : true,
-  pool: {
-    max: dbConfig.pool.max,
-    min: dbConfig.pool.min,
-    acquire: dbConfig.pool.acquire,
-    idle: dbConfig.pool.idle
-  }
-});
+console.log("process.env.DATABASE_URI",process.env.DATABASE_URI)
+const DB_URI = process.env.DATABASE_URI || 'postgres://postgres:postgres@postgres:5432/postgres'
+const sequelize = new Sequelize(DB_URI) 
 
 const db = {};
 
