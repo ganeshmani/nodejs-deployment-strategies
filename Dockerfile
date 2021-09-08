@@ -2,7 +2,7 @@ FROM node:14-alpine
 WORKDIR /usr/src/app
 COPY package.json ./
 COPY . /usr/src/app/
-RUN npm ci --production && npm cache clean --force
+RUN npm install --production
 USER node
 EXPOSE 8080
 
