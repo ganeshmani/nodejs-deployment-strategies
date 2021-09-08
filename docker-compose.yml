@@ -1,14 +1,14 @@
 version: "3.6"
 services: 
-  web:
-    build:
-      context: .
-    environment: 
-      DATABASE_URI: postgres://postgres:postgres@postgres:5432/postgres
-    depends_on: 
-      - postgres  
-    ports: 
-      - '8080:8080'
+  # web:
+  #   build:
+  #     context: .
+  #   environment: 
+  #     DATABASE_URI: postgres://postgres:postgres@postgres:5432/postgres
+  #   depends_on: 
+  #     - postgres  
+  #   ports: 
+  #     - '8080:8080'
   postgres:
     image: postgres
     restart: always

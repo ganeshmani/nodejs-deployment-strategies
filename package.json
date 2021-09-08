@@ -4,8 +4,8 @@
   "description": "Node.js Rest Apis with Express, Sequelize & PostgreSQL",
   "main": "server.js",
   "scripts": {
-    "start" : "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "cross-env NODE_ENV=test jest --coverage"
   },
   "keywords": [
     "nodejs",
@@ -20,9 +20,16 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.6.5"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.1",
+    "cross-env": "^7.0.3",
+    "jest": "^27.1.1",
+    "supertest": "^6.1.6"
   }
 }

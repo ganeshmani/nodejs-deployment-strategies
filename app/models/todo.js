@@ -1,4 +1,5 @@
-module.exports = (sequelize, Sequelize) => {
+
+module.exports = (sequelize,Sequelize) => {
   const Todo = sequelize.define("todo", {
     title: {
       type: Sequelize.STRING
