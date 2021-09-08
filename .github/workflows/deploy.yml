@@ -22,15 +22,40 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      
+      - name: Install DigitalOcean Controller
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Setup Docker Builder
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: |
+            registry.digitalocean.com/docker-nodejs-deployment-strategies/api:latest
+            registry.digitalocean.com/docker-nodejs-deployment-strategies/api:sha-${{ github.sha }}
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+  deploy-api:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy api to DigitalOcean Droplet
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.DO_API_HOST }}
+          username: root
+          key: ${{ secrets.DO_API_KEY }}
+          port: 22
+          script: |
+            doctl registry login --expiry-seconds 180
+            docker pull registry.digitalocean.com/docker-nodejs-deployment-strategies/api:latest
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+            echo 'Starting server instance'
+            docker run -d \
+              --restart always \
+              -p 0.0.0.0:80:8080
+              --name api \
+              registry.digitalocean.com/docker-nodejs-deployment-strategies/api:latest
