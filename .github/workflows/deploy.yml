@@ -24,14 +24,15 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
-      - name: Deploy API to Digitalocean Droplet
-        uses: appleboy/ssh-action@v0.1.4
         with:
-          host: ${{ secrets.DO_API_HOST }}
-          username: root
-          key: ${{ secrets.DO_API_KEY }}
-          port: 22
-          script: |
-            sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
-            docker-compose up
+          ref : docker-aws
+      - name: Heroku Deploy
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: nodejs-deployment-strategy
+          heroku_email: letscreatemorecontent2021@gmail.com
+          usedocker: true
+        env:
+          NODE_ENV: production
+          DATABASE_URI: postgres://postgres:postgres@localhost:5432/postgres
