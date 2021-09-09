@@ -5,7 +5,7 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 
 let DB_URI = ''
-console.log("process.env.NODE_ENV",process.env.NODE_ENV)
+console.log("process.env.NODE_ENV",process.env.NODE_ENV,process.env.DATABASE_URL)
 if(process.env.NODE_ENV === "test"){
    DB_URI = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/postgres'
 }
