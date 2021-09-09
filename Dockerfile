@@ -4,7 +4,7 @@ COPY package.json ./
 COPY . /usr/src/app/
 RUN npm install --production
 USER node
-EXPOSE 8080
+EXPOSE 80
 
 CMD ["node","server.js"]
 
