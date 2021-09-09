@@ -26,16 +26,13 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref : docker-aws
-      - name: Login to Heroku Container Registry
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}   
-        run: heroku container:login
-      - name: Build and Push
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:push -a ganeshmani009-app web    
-      - name: Release
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:release -a ganeshmani009-app web
-        
+      - name: Build, Push and Release a Docker container to Heroku
+        uses: gonuit/heroku-docker-deploy@v1.3.3
+        with:
+          email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          dockerfile_directory: ./
+          dockerfile_name: Dockerfile
+          docker_options: "--no-cache"
+          process_type: web
