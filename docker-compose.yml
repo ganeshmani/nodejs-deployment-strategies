@@ -4,7 +4,7 @@ services:
     build:
       context: .
     environment: 
-      DATABASE_URI: postgres://postgres:postgres@postgres:5432/postgres
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
     depends_on: 
       - postgres  
     ports: 

@@ -7,10 +7,10 @@ const env = process.env.NODE_ENV || 'development';
 let DB_URI = ''
 console.log("process.env.NODE_ENV",process.env.NODE_ENV)
 if(process.env.NODE_ENV === "test"){
-   DB_URI = process.env.TEST_DATABASE_URI || 'postgres://postgres:postgres@localhost:5432/postgres'
+   DB_URI = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/postgres'
 }
 else{
-   DB_URI = process.env.DATABASE_URI || 'postgres://postgres:postgres@postgres:5432/postgres'
+   DB_URI = process.env.DATABASE_URL || 'postgres://postgres:postgres@postgres:5432/postgres'
 }
 console.log("DB_URI",DB_URI)
 const sequelize = new Sequelize(DB_URI) 
