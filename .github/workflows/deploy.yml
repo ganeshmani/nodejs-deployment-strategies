@@ -24,38 +24,18 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
-      
-      - name: Install DigitalOcean Controller
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - name: Setup Docker Builder
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: |
-            registry.digitalocean.com/docker-nodejs-deployment-strategies/api:latest
-            registry.digitalocean.com/docker-nodejs-deployment-strategies/api:sha-${{ github.sha }}
 
-  deploy-api:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy api to DigitalOcean Droplet
-        uses: appleboy/ssh-action@v0.1.4
+      - name: Use Node.js v12
+        uses: actions/setup-node@v1
         with:
-          host: ${{ secrets.DO_API_HOST }}
-          username: root
-          key: ${{ secrets.DO_API_KEY }}
-          port: 22
-          script: |
-            doctl registry login --expiry-seconds 180
-            docker pull registry.digitalocean.com/docker-nodejs-deployment-strategies/api:latest
-
-            echo 'Starting server instance'
-            docker run -d \
-              --restart always \
-              -p 0.0.0.0:80:8080
-              --name api \
-              registry.digitalocean.com/docker-nodejs-deployment-strategies/api:latest
+          node-version: 12.x
+      - name: Install
+        run: npm install  
+      - name: Generate JWT Keys
+        run: |
+          ssh-keygen -t rsa -b 2048 -q -N '' -m PEM -f private.key
+          rm private.key.pub
+          openssl rsa -in private.key -pubout -outform PEM -out public.key
+          chmod 644 public.key private.key
+      - name: Running Docker Compose
+        run: docker-compose up --exit-code-from-web   
