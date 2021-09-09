@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref : docker-aws
-      # Building Heroku Deployment with Container Registry    
+      # Building Heroku Deployment with Container Registry - Update    
       - name: Build, Push and Release a Docker container to Heroku
         uses: gonuit/heroku-docker-deploy@v1.3.3
         with:
