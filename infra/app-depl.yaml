@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-app
+  template:
+    metadata:
+      labels:
+        app: node-app
+    spec:
+      containers:
+      - name: node-app
+        image: ganeshmani009/node-deployment-web
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+        env:
+          - name: DATABASE_URL
+            value: postgres://postgres:postgres@postgres:5432/postgres
+        imagePullPolicy: Always      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-app
+spec:
+  selector:
+    app: node-app
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: LoadBalancer  
